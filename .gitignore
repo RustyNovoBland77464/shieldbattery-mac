@@ -1,0 +1,7 @@
+# Never commit Battle.net cookies, registry hives, game files or replays.
+*.bin
+SOFTWARE
+*.rep
+*.exe
+*.dll
+.DS_Store
