@@ -7,7 +7,7 @@ graphics both work.
 Unofficial and not affiliated with ShieldBattery or Blizzard. ShieldBattery only supports
 Windows; you use this at your own risk.
 
-**Tested on** an M5 Pro running macOS 26.4, ShieldBattery 12.2.1 and StarCraft: Remastered build 13515.
+**Tested on** an M5 Pro running macOS 26.4, ShieldBattery 12.2.1 and 12.3.0, and StarCraft: Remastered build 13515.
 
 | Feature | Status |
 |---|---|
@@ -72,10 +72,22 @@ This installs it silently, applies the patches and sets the wrapper to open Shie
 
 **4. Play:** open `~/Applications/Sikarugir/ShieldBattery.app` and log in.
 
-### After every ShieldBattery update
+### Updating ShieldBattery
 
-ShieldBattery updates itself, and each update restores the unpatched DLLs. If games stick at
-"Launching game…" or online games fail, run the patch again (safe to run any time):
+ShieldBattery's auto-updater **can't work under Wine**. It downloads the update, then tries to
+check the installer's signature with PowerShell, which Wine only provides as an empty stub. The
+log shows `Error downloading update: SyntaxError: Unexpected end of JSON input`, and you're
+stuck on the old version. To update, install the new version by hand over the old one (your
+login and settings are kept), which also re-applies the patches:
+
+1. Find the current version on line 1 of <https://cdn.shieldbattery.net/app/latest.yml>.
+2. Download `https://cdn.shieldbattery.net/app/ShieldBattery-setup-<version>.exe`. Optionally,
+   compare its SHA-512 (`shasum -a 512 file | cut -d' ' -f1 | xxd -r -p | base64`) with
+   the one in `latest.yml`.
+3. Run `./scripts/3-install-shieldbattery.sh ShieldBattery-setup-<version>.exe`.
+
+If games stick at "Launching game…" or online games fail, the patches are probably missing.
+Re-run them (safe to run any time):
 
 ```bash
 python3 scripts/patch_shieldbattery_wine.py
